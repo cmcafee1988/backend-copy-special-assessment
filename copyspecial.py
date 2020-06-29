@@ -7,7 +7,13 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 
 # give credits
-__author__ = "Study hall"
+__author__ = """Study hall, 
+https://thispointer.com/python-how-to-copy-files-from-one-location-to-another-using-shutil-copy/,
+https://itsfoss.com/linux-zip-folder/#:~:text=Go%20to%20the%20folder%20where,a%20single%20file%20as%20well,
+https://linux.die.net/man/1/ziphttps://itsfoss.com/linux-zip-folder/#:~:text=Go%20to%20the%20folder%20where,a%20single%20file%20as%20well,
+http://docs.python.org/3/library/shttps://linux.die.net/man/1/ziphttps://itsfoss.com/linux-zip-folder/#:~:text=Go%20to%20the%20folder%20where,a%20single%20file%20as%20well.ubprocess.html,
+https://www.w3schools.com/python/gloss_python_function_keyword_arguments.asp,
+Mike A. """
 
 import re
 import os
@@ -43,14 +49,28 @@ def get_special_paths(dirname):
 
 def copy_to(path_list, dest_dir):
     """Copy files into destination directory"""
-    # your code here
-    return
+    if not os.path.exists(dest_dir):
+        os.makedirs(dest_dir)
+    for path in path_list:
+        shutil.copy(path, dest_dir)
+
+     
 
 
 def zip_to(path_list, dest_zip):
     """Copy files into destination zip"""
-    # your code here
-    return
+    print("zipping files")
+    
+    for path in path_list:
+        print(f"zip -j {dest_zip} {path}")
+        subprocess.run(["zip", "-j", dest_zip, path])
+
+
+     
+   
+
+    
+    
 
 
 def main(args):
@@ -66,7 +86,7 @@ def main(args):
 
     if not ns:
         parser.print_usage()
-        exit(1)
+        sys.exit(1)
     special_paths = get_special_paths(ns.from_dir)
 
 
@@ -82,11 +102,12 @@ def main(args):
     if ns.todir:
         copy_to(special_paths, ns.todir)
     
-    if ns.tozip:
+    elif ns.tozip:
         zip_to(special_paths, ns.tozip)
+        
 
-    if not ns.todir and ns.tozip:
-        print('\n'.join(special_paths))
+    else:
+        print(*special_paths, sep='\n')
 
 if __name__ == "__main__":
     print(sys.argv)
